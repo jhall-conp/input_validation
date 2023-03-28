@@ -24,14 +24,14 @@ use std::io::{self, Write};
 /// # Examples
 ///
 /// ```
-/// use cs50_input::get_input;
+/// use input_validation::get_input;
 ///
 /// let name: String = get_input("What is your name? ");
 /// println!("Hello, {}!", name);
 /// ```
 ///
 /// ```
-/// use cs50_input::get_input;
+/// use input_validation::get_input;
 ///
 /// let age: u32 = get_input("How old are you? ");
 /// println!("You are {} years old.", age);
