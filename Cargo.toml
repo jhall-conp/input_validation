@@ -1,8 +1,16 @@
 [package]
 name = "input_validation"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
+description = "Receives and validates user CLI input to match the type required by the program."
+#repository = "https://github.com/jhall-conp/input_validation"
+license = "MIT OR Apache-2.0"
+keywords = ["input", "validate", "validation"]
+categories = ["command-line-interface", ]
 
 [package.metadata.docs.rs]
 all-features = true
 include = ["doc"]
+
+[dependencies]
+regex = "1.7.3"

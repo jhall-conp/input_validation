@@ -14,6 +14,7 @@
 //! # Panics
 //! This function will panic if 'T' does not implement the 'FromStr' trait.
 use std::io::{self, Write};
+use regex::Regex;
 
 /// Prompts the user for input and parses the user's response as a specified type.
 ///
@@ -158,3 +159,33 @@ pub fn get_bool(prompt: &str) -> bool {
         }
     }
 }
+
+
+/// Prompts the user to enter an email address and returns it as a string.
+///
+/// The function ensures that the email address is valid and has the correct format.
+///
+/// # Examples
+///
+/// ```
+/// use rust_input_lib::get_email;
+///
+/// let email = get_email("Enter your email address: ");
+/// println!("Your email address is: {}", email);
+/// ```
+pub fn get_email(prompt: &str) -> String {
+    let re = Regex::new(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").unwrap();
+
+    loop {
+        let email = get_input::<String>(prompt);
+        if re.is_match(&email) {
+            return email;
+        } else {
+            println!("Invalid email address. Please enter a valid email address.");
+            continue;
+        }
+    }
+}
+
+#[cfg(test)]
+mod integration_tests;
