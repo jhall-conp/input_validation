@@ -16,6 +16,15 @@
 use std::io::{self, Write};
 use regex::Regex;
 
+/// Returns the decimal separator
+fn get_separator() -> char {
+    let integer = 1234;
+    let float = integer as f32 / 100 as f32;
+    // Parse the decimal separator from the float
+    let separator = float.to_string().chars().nth(2).unwrap();
+    separator
+}
+
 /// Prompts the user for input and parses the user's response as a specified type.
 ///
 /// This function repeatedly prompts the user for input until the user provides input that can be
@@ -50,11 +59,30 @@ pub fn get_input<T: std::str::FromStr>(prompt: &str) -> T
 where
     <T as std::str::FromStr>::Err: std::fmt::Debug,
 {
+    // First letter of T type
+    let first_letter = std::any::type_name::<T>().chars().next().unwrap();
+
     loop {
         print!("{}", prompt);
         io::stdout().flush().unwrap();
 
         let mut input = String::new();
+
+        // If first_letter is i, u or f, remove any commas from input
+        if first_letter == 'i' || first_letter == 'u' || first_letter == 'f' {
+            // If the decimal separator is '.' set thousands separator to ',', else set it to '.'
+            let locale = get_separator();
+            let thousands_separator = if locale == '.' { ',' } else { '.' };
+            
+            match io::stdin().read_line(&mut input) {
+                Ok(_) => match input.trim().replace(thousands_separator, "").parse::<T>() {
+                    Ok(val) => return val,
+                    Err(_) => continue,
+                },
+                Err(_) => continue,
+            }
+        }
+
         match io::stdin().read_line(&mut input) {
             Ok(_) => match input.trim().parse::<T>() {
                 Ok(val) => return val,
